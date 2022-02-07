@@ -17,7 +17,8 @@ const getTests = catchAsync(async (req, res) => {
 });
 
 const getTest = catchAsync(async (req, res) => {
-  const test = await testService.getTestById(req.params.testId);
+  const options = pick(req.query, ['populate']);
+  const test = await testService.getTestById(req.params.testId, options);
   if (!test) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Test not found');
   }

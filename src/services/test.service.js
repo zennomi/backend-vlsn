@@ -8,9 +8,9 @@ const ApiError = require('../utils/ApiError');
  * @returns {Promise<Test>}
  */
 const createTest = async (testBody) => {
-//   if (await Test.isEmailTaken(testBody.email)) {
-//     throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
-//   }
+  //   if (await Test.isEmailTaken(testBody.email)) {
+  //     throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
+  //   }
   return Test.create(testBody);
 };
 
@@ -33,8 +33,23 @@ const queryTests = async (filter, options) => {
  * @param {ObjectId} id
  * @returns {Promise<Test>}
  */
-const getTestById = async (id) => {
-  return Test.findById(id);
+const getTestById = async (id, options) => {
+  let testPromise = Test.findOne({ _id: id });
+
+  if (options.populate) {
+    options.populate.split(',').forEach((populateOption) => {
+      testPromise = testPromise.populate(
+        populateOption
+          .split('.')
+          .reverse()
+          .reduce((a, b) => ({ path: b, populate: a }))
+      );
+    });
+  }
+
+  testPromise = testPromise.exec();
+
+  return testPromise;
 };
 
 /**
@@ -57,9 +72,9 @@ const updateTestById = async (testId, updateBody) => {
   if (!test) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Test not found');
   }
-//   if (updateBody.email && (await Test.isEmailTaken(updateBody.email, testId))) {
-//     throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
-//   }
+  //   if (updateBody.email && (await Test.isEmailTaken(updateBody.email, testId))) {
+  //     throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
+  //   }
   Object.assign(test, updateBody);
   await test.save();
   return test;
