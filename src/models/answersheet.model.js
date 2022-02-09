@@ -12,7 +12,7 @@ const choiceSchema = new Schema({
 const answersheetSchema = new Schema({
     user: {
         type: String,
-        ref: 'User'
+        ref: 'FirebaseUser'
     },
     choices: [choiceSchema]
 }, {

@@ -8,10 +8,12 @@ const ApiError = require('../utils/ApiError');
  * @returns {Promise<User>}
  */
 const createUser = async (userBody) => {
-  if (await User.isEmailTaken(userBody.email)) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
-  }
-  return User.create(userBody);
+  userBody._id = userBody.uid || userBody._id;
+  const newUser = new User(userBody);
+  // if (await User.isEmailTaken(userBody.email)) {
+  //   throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
+  // }
+    return newUser.save();
 };
 
 /**
@@ -53,16 +55,16 @@ const getUserByEmail = async (email) => {
  * @returns {Promise<User>}
  */
 const updateUserById = async (userId, updateBody) => {
-  const user = await getUserById(userId);
-  if (!user) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+  let _user = await User.findById(userId);
+  if (!_user) {
+    updateBody._id = userId;
+      _user = new User(updateBody);
+      _user.providerData = updateBody.providerData;
+      return await _user.save();
   }
-  if (updateBody.email && (await User.isEmailTaken(updateBody.email, userId))) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
-  }
-  Object.assign(user, updateBody);
-  await user.save();
-  return user;
+  const providers = _user.providerData.map(p => p.providerId);
+  _user.providerData.push(...updateBody.providerData.filter(p => !providers.includes(p.providerId)));
+  return await _user.save();
 };
 
 /**

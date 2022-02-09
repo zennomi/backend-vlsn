@@ -1,4 +1,7 @@
 const httpStatus = require('http-status');
+const { getAuth } = require("firebase-admin/auth");
+const firebaseApp = require('../configs/firebase');
+const jwt = require("jsonwebtoken");
 const pick = require('../utils/pick');
 const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
@@ -34,10 +37,29 @@ const deleteUser = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
+const getToken = catchAsync(async (req, res) => {
+  const { user } = req.body;
+  try {
+    if (user) {
+      const AUTH = getAuth(firebaseApp);
+      const decodedUser = await AUTH.verifyIdToken(user.stsTokenManager.accessToken);
+      console.log(decodedUser, user)
+      if (decodedUser.uid != user.uid) throw new ApiError(httpStatus.FORBIDDEN, "detect cheat");
+      const { role, _id, email, displayName, photoURL } = await userService.updateUserById(user.uid, user);
+      const token = jwt.sign({ role, id: _id, email, displayName, photoURL }, process.env.TOKEN_KEY, { expiresIn: "2h" });
+      return res.status(httpStatus.CREATED).send(token);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+  throw new ApiError(httpStatus.CONFLICT, "cant't get token");
+});
+
 module.exports = {
   createUser,
   getUsers,
   getUser,
   updateUser,
   deleteUser,
+  getToken
 };

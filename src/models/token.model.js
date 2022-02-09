@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const { toJSON } = require('./plugins');
-const { tokenTypes } = require('../config/tokens');
+const { tokenTypes } = require('../configs/tokens');
 
 const tokenSchema = mongoose.Schema(
   {
@@ -11,7 +11,7 @@ const tokenSchema = mongoose.Schema(
     },
     user: {
       type: mongoose.SchemaTypes.ObjectId,
-      ref: 'User',
+      ref: 'FirebaseUser',
       required: true,
     },
     type: {
