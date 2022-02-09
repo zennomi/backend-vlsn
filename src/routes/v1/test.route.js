@@ -14,4 +14,6 @@ router
   .patch(testController.updateTest)
   .delete(testController.deleteTest);
 
+  router.route('/:testId/key')
+  .get(testController.getTestKey)
 module.exports = router;

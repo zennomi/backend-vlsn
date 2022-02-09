@@ -30,7 +30,7 @@ const testSchema = new Schema({
         type: Boolean,
         default: true
     }
-})
+});
 
 testSchema.plugin(paginate);
 

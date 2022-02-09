@@ -22,7 +22,18 @@ const getTest = catchAsync(async (req, res) => {
   if (!test) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Test not found');
   }
+  if (options?.populate?.includes("questions")) {
+    test.questions = test.questions.map(q => {
+      q.choices = q.choices.map(c => ({ ...c.toJSON(), isTrue: undefined }));
+      return q;
+    });
+  }
   res.send(test);
+});
+
+const getTestKey = catchAsync(async (req, res) => {
+  const key = await testService.getTestKey(req.params.testId);
+  res.send(key);
 });
 
 const updateTest = catchAsync(async (req, res) => {
@@ -39,6 +50,7 @@ module.exports = {
   createTest,
   getTests,
   getTest,
+  getTestKey,
   updateTest,
   deleteTest,
 };

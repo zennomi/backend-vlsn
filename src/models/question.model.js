@@ -12,12 +12,11 @@ const tagSchema = new Schema({
 })
 
 const choiceSchema = new Schema({
-    _id: false,
     content: {
         type: String,
         get: toInlineElement
     },
-    isTrue: Boolean
+    isTrue: { type: Boolean, private: true }
 }, {
     toObject: { getters: true },
     toJSON: { getters: true },
@@ -49,14 +48,6 @@ const questionSchema = new Schema({
 
 questionSchema.methods.getMaxLengthChoice = function () {
     return Math.max(...this.choices.map(c => c.content.replace(/<.*>/g, "").length))
-}
-
-questionSchema.methods.getTrueChoice = function () {
-    let keyArr = [];
-    this.choices.forEach((c, i) => {
-        if (c.isTrue == true) keyArr.push(String.fromCharCode(65 + i));
-    });
-    return keyArr.join(",");
 }
 
 questionSchema.methods.getTrueChoiceArray = function () {

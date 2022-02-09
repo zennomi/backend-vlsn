@@ -36,7 +36,7 @@ const queryTests = async (filter, options) => {
 const getTestById = async (id, options) => {
   let testPromise = Test.findOne({ _id: id });
 
-  if (options.populate) {
+  if (options?.populate) {
     options.populate.split(',').forEach((populateOption) => {
       testPromise = testPromise.populate(
         populateOption
@@ -60,6 +60,15 @@ const getTestById = async (id, options) => {
 const getTestByEmail = async (email) => {
   return Test.findOne({ email });
 };
+
+const getTestKey = async (testId) => {
+  const test = await getTestById(testId, { populate: "questions" });
+  const key = [];
+  test.questions.forEach(q => {
+    key.push(...q.getTrueChoiceArray());
+  })
+  return key;
+}
 
 /**
  * Update test by id
@@ -98,6 +107,7 @@ module.exports = {
   createTest,
   queryTests,
   getTestById,
+  getTestKey,
   getTestByEmail,
   updateTestById,
   deleteTestById,
