@@ -81,9 +81,6 @@ const updateTestById = async (testId, updateBody) => {
   if (!test) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Test not found');
   }
-  //   if (updateBody.email && (await Test.isEmailTaken(updateBody.email, testId))) {
-  //     throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
-  //   }
   Object.assign(test, updateBody);
   await test.save();
   return test;

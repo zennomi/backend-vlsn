@@ -5,16 +5,23 @@ const Schema = mongoose.Schema;
 
 const choiceSchema = new Schema({
     _id: false,
-    choice_id:  Schema.Types.ObjectId,
+    choiceId: Schema.Types.ObjectId,
     moment: Date
 })
 
 const answersheetSchema = new Schema({
     user: {
         type: String,
-        ref: 'FirebaseUser'
+        ref: 'FirebaseUser',
+        required: true
     },
-    choices: [choiceSchema]
+    testId: {
+        type: Schema.Types.ObjectId,
+        ref: "Test",
+        required: true
+    },
+    choices: [choiceSchema],
+    finishedAt: Date
 }, {
     timestamps: true
 })

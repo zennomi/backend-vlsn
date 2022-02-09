@@ -1,19 +1,20 @@
 const express = require('express');
 const testController = require('../../controllers/test.controller');
+const { authRequire } = require("../../middlewares/auth.middleware");
 
 const router = express.Router();
 
 router
   .route('/')
-  .post(testController.createTest)
+  // .post(testController.createTest)
   .get(testController.getTests);
 
 router
   .route('/:testId')
   .get(testController.getTest)
-  .patch(testController.updateTest)
-  .delete(testController.deleteTest);
+  // .patch(testController.updateTest)
+  // .delete(authRequire, testController.deleteTest);
 
   router.route('/:testId/key')
-  .get(testController.getTestKey)
+  .get(authRequire, testController.getTestKey)
 module.exports = router;
