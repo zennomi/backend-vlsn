@@ -46,6 +46,11 @@ const deleteTest = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
+const getResultTable = catchAsync(async (req, res) => {
+  const table = await testService.getResultTableById(req.params.testId);
+  res.status(httpStatus.OK).send(table);
+});
+
 module.exports = {
   createTest,
   getTests,
@@ -53,4 +58,5 @@ module.exports = {
   getTestKey,
   updateTest,
   deleteTest,
+  getResultTable,
 };

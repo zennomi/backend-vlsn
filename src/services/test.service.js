@@ -1,6 +1,8 @@
 const httpStatus = require('http-status');
 const { Test } = require('../models');
+const answerSheetService = require('./answerSheet.service');
 const ApiError = require('../utils/ApiError');
+const pick = require('../utils/pick');
 
 /**
  * Create a test
@@ -35,7 +37,6 @@ const queryTests = async (filter, options) => {
  */
 const getTestById = async (id, options) => {
   let testPromise = Test.findOne({ _id: id });
-
   if (options?.populate) {
     options.populate.split(',').forEach((populateOption) => {
       testPromise = testPromise.populate(
@@ -63,10 +64,10 @@ const getTestByEmail = async (email) => {
 
 const getTestKey = async (testId) => {
   const test = await getTestById(testId, { populate: "questions" });
-  const key = [];
-  test.questions.forEach(q => {
-    key.push(...q.getTrueChoiceArray());
-  })
+  if (!test) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Test not found');
+  }
+  const key = test.getKey();
   return key;
 }
 
@@ -100,6 +101,26 @@ const deleteTestById = async (testId) => {
   return test;
 };
 
+const getResultTableById = async (testId) => {
+  const test = await getTestById(testId, { populate: "questions" });
+  if (!test) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Test not found');
+  }
+  const key = test.getKey();
+  const sheetFilter = { testId: testId }
+  const { results: sheets } = await answerSheetService.queryAnswerSheets(sheetFilter, { populate: "user", limit: 1000 });
+  const results = sheets.map(sheet => {
+    sheet = sheet.toJSON();
+    const result = pick(sheet, ['createdAt', 'updatedAt', 'finishedAt', 'id']);
+    // result.id = result._id;
+    result.user = pick(sheet.user, ['displayName', 'photoURL', 'email', 'id']);
+    result.trueCount = sheet.choices.filter(c => key.includes(c.choiceId.toString())).length;
+    result.mark = result.trueCount / test.questions.length * 10;
+    return result;
+  })
+  return results;
+}
+
 module.exports = {
   createTest,
   queryTests,
@@ -108,4 +129,5 @@ module.exports = {
   getTestByEmail,
   updateTestById,
   deleteTestById,
+  getResultTableById,
 };

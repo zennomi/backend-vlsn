@@ -82,10 +82,15 @@ const deleteAnswerSheetById = async (answerSheetId) => {
   return answerSheet;
 };
 
+const deleteManyAnswerSheetById = (answerSheetIds) => {
+  return AnswerSheet.deleteMany({_id: {$in: answerSheetIds}})
+};
+
 module.exports = {
   createAnswerSheet,
   queryAnswerSheets,
   getAnswerSheetById,
   updateAnswerSheetById,
   deleteAnswerSheetById,
+  deleteManyAnswerSheetById,
 };

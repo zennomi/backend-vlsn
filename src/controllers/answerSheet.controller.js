@@ -27,6 +27,8 @@ const getAnswerSheet = catchAsync(async (req, res) => {
 });
 
 const updateAnswerSheet = catchAsync(async (req, res) => {
+  // block when finished
+  if (req.body.isFinished) req.body.finishedAt = new Date();
   const answerSheet = await answerSheetService.updateAnswerSheetById(req.params.answerSheetId, req.body);
   res.send(answerSheet);
 });
@@ -36,10 +38,16 @@ const deleteAnswerSheet = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
+const deleteManyAnswerSheets = catchAsync(async (req, res) => {
+  await answerSheetService.deleteManyAnswerSheetById(req.body.ids);
+  res.status(httpStatus.NO_CONTENT).send();
+});
+
 module.exports = {
   createAnswerSheet,
   getAnswerSheets,
   getAnswerSheet,
   updateAnswerSheet,
   deleteAnswerSheet,
+  deleteManyAnswerSheets
 };

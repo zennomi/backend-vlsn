@@ -4,7 +4,6 @@ const { toJSON, paginate } = require('./plugins');
 const Schema = mongoose.Schema;
 
 const choiceSchema = new Schema({
-    _id: false,
     choiceId: Schema.Types.ObjectId,
     moment: Date
 })
@@ -27,5 +26,6 @@ const answersheetSchema = new Schema({
 })
 
 answersheetSchema.plugin(paginate);
+answersheetSchema.plugin(toJSON);
 
 module.exports = mongoose.model('answersheet', answersheetSchema);

@@ -43,7 +43,6 @@ const getToken = catchAsync(async (req, res) => {
     if (user) {
       const AUTH = getAuth(firebaseApp);
       const decodedUser = await AUTH.verifyIdToken(user.stsTokenManager.accessToken);
-      console.log(decodedUser, user)
       if (decodedUser.uid != user.uid) throw new ApiError(httpStatus.FORBIDDEN, "detect cheat");
       const { role, _id, email, displayName, photoURL } = await userService.updateUserById(user.uid, user);
       const token = jwt.sign({ role, id: _id, email, displayName, photoURL }, process.env.TOKEN_KEY, { expiresIn: "2h" });

@@ -32,6 +32,16 @@ const testSchema = new Schema({
     }
 });
 
+testSchema.methods.getKey = function() {
+    if (!this.populated("questions")) return [];
+    const key = [];
+    this.questions.forEach(q => {
+        key.push(...q.getTrueChoiceArray());
+    })
+    return key;
+}
+
 testSchema.plugin(paginate);
+testSchema.plugin(toJSON);
 
 module.exports = mongoose.model('Test', testSchema);
