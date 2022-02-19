@@ -66,5 +66,11 @@ module.exports = Question;
 
 function toInlineElement(string) {
     const html = decode(string);
-    return html.replace(/color:black/g, "").replace(/<p>(.*)<\/p>/, "$1").replace(/(<math.*math>)/g, (match, m1) => `$${Mathml2latex.convert(m1)}$`);
+    return html
+    .replace(/color:black/g, "")
+    .replace(/<p>(.*)<\/p>/, "$1")
+    .replace(/(<math.*math>)/g, (match, m1) => `$${Mathml2latex.convert(m1)}$`)
+    .replace(/\\mu/g, (match, m1) => `\\mu `)
+    .replace(/\\omega/g, (match, m1) => `\\omega `)
+    ;
 }
