@@ -70,7 +70,8 @@ function toInlineElement(string) {
     .replace(/color:black/g, "")
     .replace(/<p>(.*)<\/p>/, "$1")
     .replace(/(<math.*math>)/g, (match, m1) => `$${Mathml2latex.convert(m1)}$`)
-    .replace(/\\mu/g, (match, m1) => `\\mu `)
-    .replace(/\\omega/g, (match, m1) => `\\omega `)
+    .replace(/\\mu/ig, `\\mu `)
+    .replace(/\\omega/ig, `\\omega `)
+    // .replace(/\\Omega/g, `\\omega `)
     ;
 }
