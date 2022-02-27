@@ -26,6 +26,9 @@ const createTest = async (testBody) => {
  * @returns {Promise<QueryResult>}
  */
 const queryTests = async (filter, options) => {
+  if (filter.name) filter.name = { $regex: filter.name, "$options": "i" };
+  if (filter.tags) tags = { $all: filter.tags.split(",") };
+
   const tests = await Test.paginate(filter, options);
   return tests;
 };
@@ -111,7 +114,7 @@ const getResultTableById = async (testId) => {
   const { results: sheets } = await answerSheetService.queryAnswerSheets(sheetFilter, { populate: "user", limit: 1000 });
   const results = sheets.map(sheet => {
     sheet = sheet.toJSON();
-    const result = pick(sheet, ['createdAt', 'updatedAt', 'finishedAt', 'id']);
+    const result = pick(sheet, ['createdAt', 'updatedAt', 'finishedAt', 'id', 'blurCount']);
     // result.id = result._id;
     result.user = pick(sheet.user, ['displayName', 'photoURL', 'email', 'id']);
     result.trueCount = sheet.choices.filter(c => key.includes(c.choiceId.toString())).length;

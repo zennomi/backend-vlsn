@@ -7,6 +7,8 @@ const { answerSheetService } = require('../services');
 const createAnswerSheet = catchAsync(async (req, res) => {
   const sheetBody = req.body;
   sheetBody.user = req.user.id;
+  sheetBody.userAgent = req.get("User-Agent");
+  sheetBody.userIp = req.ip;
   const answerSheet = await answerSheetService.createAnswerSheet(sheetBody);
   res.status(httpStatus.CREATED).send(answerSheet);
 });

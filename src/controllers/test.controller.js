@@ -10,7 +10,7 @@ const createTest = catchAsync(async (req, res) => {
 });
 
 const getTests = catchAsync(async (req, res) => {
-  const filter = pick(req.query, ['name', 'role']);
+  const filter = pick(req.query, ['name', 'grade', 'tags', 'isPublic']);
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
   const result = await testService.queryTests(filter, options);
   res.send(result);

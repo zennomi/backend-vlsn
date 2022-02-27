@@ -3,14 +3,9 @@ const { toJSON, paginate } = require('./plugins');
 
 const Schema = mongoose.Schema;
 
-const tagSchema = new Schema({
-    _id: false,
-    value: String
-})
-
 const testSchema = new Schema({
     questions: [{ type: Schema.Types.ObjectId, ref: 'Question' }],
-    tags: [tagSchema],
+    tags: [String],
     time: Number,
     name: String,
     grade: { type: Number, default: 12 },

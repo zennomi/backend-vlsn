@@ -38,13 +38,17 @@ const deleteUser = catchAsync(async (req, res) => {
 });
 
 const getToken = catchAsync(async (req, res) => {
-  const { user } = req.body;
+  const { user: bodyUser } = req.body;
   try {
-    if (user) {
+    if (bodyUser) {
       const AUTH = getAuth(firebaseApp);
-      const decodedUser = await AUTH.verifyIdToken(user.stsTokenManager.accessToken);
-      if (decodedUser.uid != user.uid) throw new ApiError(httpStatus.FORBIDDEN, "detect cheat");
-      const { role, _id, email, displayName, photoURL } = await userService.updateUserById(user.uid, user);
+      const decodedUser = await AUTH.verifyIdToken(bodyUser.stsTokenManager.accessToken);
+      if (decodedUser.uid != bodyUser.uid) throw new ApiError(httpStatus.FORBIDDEN, "detect cheat");
+      let user = await userService.getUserById(bodyUser.uid);
+      if (!user) {
+        user = await userService.updateUserById(bodyUser.uid, bodyUser);
+      }
+      const { role, _id, email, displayName, photoURL } = user;
       const token = jwt.sign({ role, id: _id, email, displayName, photoURL }, process.env.TOKEN_KEY, { expiresIn: "2h" });
       return res.status(httpStatus.CREATED).send(token);
     }

@@ -20,7 +20,10 @@ const answersheetSchema = new Schema({
         required: true
     },
     choices: [choiceSchema],
-    finishedAt: Date
+    finishedAt: Date,
+    blurCount: Number,
+    userAgent: String,
+    userIp: String
 }, {
     timestamps: true
 })

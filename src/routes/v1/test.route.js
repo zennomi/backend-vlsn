@@ -1,23 +1,23 @@
 const express = require('express');
 const testController = require('../../controllers/test.controller');
-const { authRequire, adminRequire } = require("../../middlewares/auth.middleware");
+const { authRequire, staffRequire } = require("../../middlewares/auth.middleware");
 const cacheRequest = require('../../middlewares/cache');
 
 const router = express.Router();
 
 router
   .route('/')
-  // .post(testController.createTest)
+  .post(staffRequire, testController.createTest)
   .get(testController.getTests);
 
 router
   .route('/:testId')
-  .get(cacheRequest(60 * 5), testController.getTest)
-// .patch(testController.updateTest)
+  .get(cacheRequest.setCache(60 * 5), testController.getTest)
+  .patch(cacheRequest.deleteCache, staffRequire, testController.updateTest)
 // .delete(authRequire, testController.deleteTest);
 
 router.route('/:testId/key')
-  .get(cacheRequest(60 * 5), authRequire, testController.getTestKey)
+  .get(authRequire, cacheRequest.setCache(60 * 5), testController.getTestKey)
 
 router.route('/:testId/result-table')
   .get(testController.getResultTable);
