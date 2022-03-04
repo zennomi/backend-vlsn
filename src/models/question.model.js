@@ -5,12 +5,6 @@ const { decode } = require('html-entities');
 
 const Schema = mongoose.Schema;
 
-const tagSchema = new Schema({
-    _id: false,
-    value: String,
-    grade: Number
-})
-
 const choiceSchema = new Schema({
     content: {
         type: String,
@@ -37,8 +31,7 @@ const questionSchema = new Schema({
         type: Number,
         default: 11
     },
-    main_tags: [tagSchema],
-    side_tags: [tagSchema]
+    tags: [String]
 }, {
     timestamps: true,
     toObject: { getters: true, setters: true, virtual: true },

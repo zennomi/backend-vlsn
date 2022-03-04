@@ -24,6 +24,8 @@ const createQuestion = async (questionBody) => {
  * @returns {Promise<QueryResult>}
  */
 const queryQuestions = async (filter, options) => {
+  if (filter.name) filter.name = { $regex: filter.name, "$options": "i" };
+  if (filter.tags) filter.tags = { $all: filter.tags.split(",") };
   const questions = await Question.paginate(filter, options);
   return questions;
 };
