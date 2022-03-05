@@ -47,7 +47,7 @@ const deleteTest = catchAsync(async (req, res) => {
 });
 
 const getResultTable = catchAsync(async (req, res) => {
-  const table = await testService.getResultTableById(req.params.testId);
+  const table = await testService.getResultTableById(req.params.testId, req.query.userId);
   res.status(httpStatus.OK).send(table);
 });
 

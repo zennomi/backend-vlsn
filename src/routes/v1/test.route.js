@@ -14,7 +14,7 @@ router
   .route('/:testId')
   .get(cacheRequest.setCache(60 * 5), testController.getTest)
   .patch(cacheRequest.deleteCache, staffRequire, testController.updateTest)
-// .delete(authRequire, testController.deleteTest);
+  .delete(authRequire, staffRequire, testController.deleteTest);
 
 router.route('/:testId/key')
   .get(authRequire, cacheRequest.setCache(60 * 5), testController.getTestKey)

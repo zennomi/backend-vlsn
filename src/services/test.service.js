@@ -1,5 +1,5 @@
 const httpStatus = require('http-status');
-const { Test } = require('../models');
+const { Test, AnswerSheet } = require('../models');
 const answerSheetService = require('./answerSheet.service');
 const ApiError = require('../utils/ApiError');
 const pick = require('../utils/pick');
@@ -100,17 +100,19 @@ const deleteTestById = async (testId) => {
   if (!test) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Test not found');
   }
+  await AnswerSheet.deleteMany({ testId });
   await test.remove();
   return test;
 };
 
-const getResultTableById = async (testId) => {
+const getResultTableById = async (testId, userId) => {
   const test = await getTestById(testId, { populate: "questions" });
   if (!test) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Test not found');
   }
   const key = test.getKey();
   const sheetFilter = { testId: testId }
+  if (userId) sheetFilter.user = userId;
   const { results: sheets } = await answerSheetService.queryAnswerSheets(sheetFilter, { populate: "user", limit: 1000 });
   const results = sheets.map(sheet => {
     sheet = sheet.toJSON();
