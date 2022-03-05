@@ -8,9 +8,9 @@ const ApiError = require('../utils/ApiError');
  * @returns {Promise<Question>}
  */
 const createQuestion = async (questionBody) => {
-//   if (await Question.isEmailTaken(questionBody.email)) {
-//     throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
-//   }
+  //   if (await Question.isEmailTaken(questionBody.email)) {
+  //     throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
+  //   }
   return Question.create(questionBody);
 };
 
@@ -59,9 +59,9 @@ const updateQuestionById = async (questionId, updateBody) => {
   if (!question) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Question not found');
   }
-//   if (updateBody.email && (await Question.isEmailTaken(updateBody.email, questionId))) {
-//     throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
-//   }
+  //   if (updateBody.email && (await Question.isEmailTaken(updateBody.email, questionId))) {
+  //     throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
+  //   }
   Object.assign(question, updateBody);
   await question.save();
   return question;

@@ -62,9 +62,10 @@ function toInlineElement(string) {
     return html
     .replace(/color:black/g, "")
     .replace(/<p>(.*)<\/p>/, "$1")
-    .replace(/(<math.*math>)/g, (match, m1) => `$${Mathml2latex.convert(m1)}$`)
-    .replace(/\\mu/ig, `\\mu `)
-    .replace(/\\omega/ig, `\\omega `)
-    // .replace(/\\Omega/g, `\\omega `)
+    .replace(/(<math.*?math>)/g, (match, m1) => `$${Mathml2latex.convert(m1)}$`)
+    .replace(/\\mu/g, `\\mu `)
+    .replace(/\\pi/g, `\\pi `)
+    .replace(/\\omega/g, `\\omega `)
+    .replace(/\\Omega/g, `\\Omega `)
     ;
 }
