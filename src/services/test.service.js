@@ -86,6 +86,7 @@ const updateTestById = async (testId, updateBody) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'Test not found');
   }
   Object.assign(test, updateBody);
+  console.log(test);
   await test.save();
   return test;
 };
