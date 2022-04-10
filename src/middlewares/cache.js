@@ -1,11 +1,11 @@
-const redisClient = require('../configs/cache');
-const catchAsync = require('../utils/catchAsync');
-const logger = require('../configs/logger');
-const { env } = require('../configs/config');
+const redisClient = require("../configs/cache");
+const catchAsync = require("../utils/catchAsync");
+const logger = require("../configs/logger");
+const { env } = require("../configs/config");
 
 const setCache = (second) =>
   catchAsync(async (req, res, next) => {
-    if (req.query.cache == 'false') return next();
+    if (req.query.cache == "false") return next();
 
     const data = await redisClient.get(req.originalUrl);
     if (data) {
@@ -24,11 +24,21 @@ const setCache = (second) =>
   });
 
 const deleteCache = catchAsync(async (req, res, next) => {
-  if (req.query.cache == 'false') return next();
-  console.log('hello');
-  logger.info(`Delete ${req.method} ${req.originalUrl}`);
-  await redisClient.del(req.originalUrl);
+  if (req.query.cache == "false") return next();
+  // await redisClient.del(req.originalUrl);
+  await scanAndDelete(req.originalUrl + "*");
   next();
 });
+
+async function scanAndDelete(pattern) {
+  let cursor = "0";
+  // delete any paths with query string matches
+  const reply = await redisClient.scan(cursor, { MATCH: pattern, COUNT: 1000 });
+  for (key of reply.keys) {
+    cursor = reply.cursor;
+    logger.info(`DELETE CACHE ${key}`);
+    await redisClient.del(key);
+  }
+}
 
 module.exports = { setCache, deleteCache };

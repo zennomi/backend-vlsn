@@ -1,6 +1,6 @@
-const httpStatus = require('http-status');
-const { Question } = require('../models');
-const ApiError = require('../utils/ApiError');
+const httpStatus = require("http-status");
+const { Question } = require("../models");
+const ApiError = require("../utils/ApiError");
 
 /**
  * Create a question
@@ -24,8 +24,16 @@ const createQuestion = async (questionBody) => {
  * @returns {Promise<QueryResult>}
  */
 const queryQuestions = async (filter, options) => {
-  if (filter.name) filter.name = { $regex: filter.name, "$options": "i" };
+  if (filter.query) {
+    filter.question = { $regex: filter.query, $options: "i" };
+    // const regex = new RegExp(`${filter.query}`)
+  }
+  delete filter.query;
+  delete filter.isSolved;
   if (filter.tags) filter.tags = { $all: filter.tags.split(",") };
+  // if (filter.isSolved)
+  //   filter["$expr"] = { $gt: [{ $strLenCP: "$answer" }, 10] };
+  console.log(filter);
   const questions = await Question.paginate(filter, options);
   return questions;
 };
@@ -57,7 +65,7 @@ const getQuestionByEmail = async (email) => {
 const updateQuestionById = async (questionId, updateBody) => {
   const question = await getQuestionById(questionId);
   if (!question) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Question not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "Question not found");
   }
   //   if (updateBody.email && (await Question.isEmailTaken(updateBody.email, questionId))) {
   //     throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
@@ -75,7 +83,7 @@ const updateQuestionById = async (questionId, updateBody) => {
 const deleteQuestionById = async (questionId) => {
   const question = await getQuestionById(questionId);
   if (!question) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Question not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "Question not found");
   }
   await question.remove();
   return question;
