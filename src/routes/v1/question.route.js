@@ -1,17 +1,19 @@
-const express = require('express');
-const questionController = require('../../controllers/question.controller');
+const express = require("express");
+const questionController = require("../../controllers/question.controller");
 
 const router = express.Router();
 
 router
-  .route('/')
+  .route("/")
   .post(questionController.createQuestion)
   .get(questionController.getQuestions);
 
 router
-  .route('/:questionId')
+  .route("/:questionId")
   .get(questionController.getQuestion)
-  .patch(questionController.updateQuestion)
-  // .delete(questionController.deleteQuestion);
+  .patch(questionController.updateQuestion);
+// .delete(questionController.deleteQuestion);
+
+router.route("/random").post(questionController.getQuestionsWithCriterias);
 
 module.exports = router;

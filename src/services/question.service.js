@@ -89,6 +89,30 @@ const deleteQuestionById = async (questionId) => {
   return question;
 };
 
+const queryQuestionsWithCriterias = async (criterias) => {
+  const results = [];
+  for (const criteria of criterias) {
+    const matchedQuestions = await Question.aggregate([
+      {
+        $match: {
+          tags: { $elemMatch: { $regex: criteria.topic, $options: "i" } },
+          level: { $gte: criteria.level - 1, $lte: criteria.level + 1 },
+        },
+      },
+      {
+        $sample: { size: criteria.quantity },
+      },
+    ]);
+    if (matchedQuestions.length < criteria.quantity)
+      throw new ApiError(
+        httpStatus.NOT_FOUND,
+        `Chuyên đề ${criteria.topic} độ khó ${criteria.level} chỉ có ${matchedQuestions.length} câu.`
+      );
+    results.push(...matchedQuestions);
+  }
+  return results;
+};
+
 module.exports = {
   createQuestion,
   queryQuestions,
@@ -96,4 +120,5 @@ module.exports = {
   getQuestionByEmail,
   updateQuestionById,
   deleteQuestionById,
+  queryQuestionsWithCriterias,
 };
