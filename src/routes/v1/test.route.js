@@ -1,6 +1,6 @@
 const express = require('express');
 const testController = require('../../controllers/test.controller');
-const { authRequire, staffRequire } = require("../../middlewares/auth.middleware");
+const { authRequire, staffRequire, auth } = require("../../middlewares/auth.middleware");
 const cacheRequest = require('../../middlewares/cache');
 
 const router = express.Router();
@@ -8,7 +8,7 @@ const router = express.Router();
 router
   .route('/')
   .post(staffRequire, testController.createTest)
-  .get(testController.getTests);
+  .get(auth, testController.getTests);
 
 router
   .route('/:testId')

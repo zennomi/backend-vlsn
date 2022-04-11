@@ -61,6 +61,7 @@ function toInlineElement(string) {
     const html = decode(string);
     return html
     .replace(/color:black/g, "")
+    .replace(/color: black/g, "")
     .replace(/<p>(.*)<\/p>/, "$1")
     .replace(/(<math.*?math>)/g, (match, m1) => `$${Mathml2latex.convert(m1)}$`)
     .replace(/\\mu/g, `\\mu `)

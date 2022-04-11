@@ -28,7 +28,7 @@ const createTest = async (testBody) => {
 const queryTests = async (filter, options) => {
   if (filter.name) filter.name = { $regex: filter.name, "$options": "i" };
   if (filter.tags) tags = { $all: filter.tags.split(",") };
-
+  console.log(filter);
   const tests = await Test.paginate(filter, options);
   return tests;
 };

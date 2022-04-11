@@ -10,8 +10,9 @@ const createTest = catchAsync(async (req, res) => {
 });
 
 const getTests = catchAsync(async (req, res) => {
-  const filter = pick(req.query, ['name', 'grade', 'tags', 'isPublic']);
+  const filter = pick(req.query, ['name', 'grade', 'tags']);
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
+  if (!req.user?.isStaff) filter.isPublic = true;
   const result = await testService.queryTests(filter, options);
   res.send(result);
 });
