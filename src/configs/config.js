@@ -12,6 +12,7 @@ const envVarsSchema = Joi.object()
     REDIS_HOST: Joi.string(),
     REDIS_PASSWORD: Joi.string(),
     REDIS_ENDPOINT_URI: Joi.string().default('127.0.0.1:6379').description('Redis url'),
+    MANAGEMENT_APP_URL: Joi.string().default('localhost:8092').description('Management App url')
   })
   .unknown();
 
@@ -39,4 +40,5 @@ module.exports = {
       ,
     password: envVars.REDIS_PASSWORD || undefined
   },
+  managementAppUrl: envVars.MANAGEMENT_APP_URL,
 };

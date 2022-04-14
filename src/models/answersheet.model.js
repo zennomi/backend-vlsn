@@ -5,7 +5,9 @@ const Schema = mongoose.Schema;
 
 const choiceSchema = new Schema({
     choiceId: Schema.Types.ObjectId,
-    moment: Date
+    moment: Date,
+}, {
+    _id: false
 })
 
 const answersheetSchema = new Schema({
@@ -23,7 +25,8 @@ const answersheetSchema = new Schema({
     finishedAt: Date,
     blurCount: Number,
     userAgent: String,
-    userIp: String
+    userIp: String,
+    mark: Number
 }, {
     timestamps: true
 })
