@@ -7,7 +7,6 @@ const { userService } = require("../services");
 
 const connectToManagementApp = catchAsync(async (req, res) => {
   try {
-    console.log(req.body);
     const { data: loginData } = await axios({
       url: `${managementAppUrl}/api/v1/users/login`,
       method: "get",
@@ -16,7 +15,7 @@ const connectToManagementApp = catchAsync(async (req, res) => {
 
     const { token, id: userId, userName, fullName } = loginData;
 
-    const { data } = await axios({
+    await axios({
       url: `${managementAppUrl}/api/v1/users/asscociate`,
       method: "put",
       headers: {
@@ -28,6 +27,7 @@ const connectToManagementApp = catchAsync(async (req, res) => {
         facebookUrl: req.user.photoURL,
       },
     });
+
     await userService.updateUserById(req.user.id, {
       managementAppAccount: {
         userId,
@@ -35,6 +35,7 @@ const connectToManagementApp = catchAsync(async (req, res) => {
         fullName,
       },
     });
+
     return res.send({ userId, userName, fullName });
   } catch (error) {
     console.log(error);

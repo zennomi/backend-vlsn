@@ -70,6 +70,7 @@ const updateUserById = async (userId, updateBody) => {
       )
     );
   }
+  if (updateBody.managementAppAccount) _user.managementAppAccount = updateBody.managementAppAccount;
   return await _user.save();
 };
 
