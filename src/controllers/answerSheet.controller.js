@@ -15,8 +15,8 @@ const createAnswerSheet = catchAsync(async (req, res) => {
 });
 
 const getAnswerSheets = catchAsync(async (req, res) => {
-  const filter = pick(req.query, ["name", "role"]);
-  const options = pick(req.query, ["sortBy", "limit", "page"]);
+  const filter = pick(req.query, ["user"]);
+  const options = pick(req.query, ["sortBy", "limit", "page", "populate"]);
   const result = await answerSheetService.queryAnswerSheets(filter, options);
   res.send(result);
 });
