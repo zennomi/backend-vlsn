@@ -1,8 +1,8 @@
-const mongoose = require('mongoose');
-const validator = require('validator');
-const bcrypt = require('bcryptjs');
-const { toJSON, paginate } = require('./plugins');
-const { roles } = require('../configs/roles');
+const mongoose = require("mongoose");
+const validator = require("validator");
+const bcrypt = require("bcryptjs");
+const { toJSON, paginate } = require("./plugins");
+const { roles } = require("../configs/roles");
 
 const userSchema = mongoose.Schema(
   {
@@ -18,30 +18,37 @@ const userSchema = mongoose.Schema(
       lowercase: true,
       validate(value) {
         if (!validator.isEmail(value)) {
-          throw new Error('Invalid email');
+          throw new Error("Invalid email");
         }
       },
     },
     role: {
       type: String,
       enum: roles,
-      default: 'user',
+      default: "user",
     },
     emailVerified: {
       type: Boolean,
       default: false,
     },
     photoURL: String,
+    managementAppAccount: {
+      userId: Number,
+      userName: String,
+      fullName: String,
+    },
     lastLoginAt: Date,
     phoneNumber: String,
-    providerData: [{
-      displayName: String,
-      email: String,
-      phoneNumber: String,
-      photoURL: String,
-      providerId: String,
-      uid: String,
-    }]
+    providerData: [
+      {
+        displayName: String,
+        email: String,
+        phoneNumber: String,
+        photoURL: String,
+        providerId: String,
+        uid: String,
+      },
+    ],
   },
   {
     timestamps: true,
@@ -84,6 +91,6 @@ userSchema.plugin(paginate);
 /**
  * @typedef User
  */
-const User = mongoose.model('FirebaseUser', userSchema);
+const User = mongoose.model("FirebaseUser", userSchema);
 
 module.exports = User;

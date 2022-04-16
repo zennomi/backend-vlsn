@@ -4,6 +4,7 @@ const userRoute = require('./user.route');
 const questionRoute = require('./question.route');
 const testRoute = require('./test.route');
 const answerSheetRoute = require('./answerSheet.route');
+const managementRoute = require('./management.route');
 const docsRoute = require('./docs.route');
 const config = require('../../configs/config');
 
@@ -25,6 +26,10 @@ const defaultRoutes = [
   {
     path: '/answersheets',
     route: answerSheetRoute,
+  },
+  {
+    path: '/managementapp',
+    route: managementRoute,
   },
 ];
 

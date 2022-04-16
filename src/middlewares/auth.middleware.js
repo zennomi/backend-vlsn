@@ -7,7 +7,6 @@ const jwt = require("jsonwebtoken");
 
 const auth = catchAsync(async (req, res, next) => {
   const token = req.headers["x-access-token"];
-  console.log(token);
   if (token) {
     try {
       req.user = jwt.verify(token, process.env.TOKEN_KEY);

@@ -1,6 +1,6 @@
-const httpStatus = require('http-status');
-const { User } = require('../models');
-const ApiError = require('../utils/ApiError');
+const httpStatus = require("http-status");
+const { User } = require("../models");
+const ApiError = require("../utils/ApiError");
 
 /**
  * Create a user
@@ -13,7 +13,7 @@ const createUser = async (userBody) => {
   // if (await User.isEmailTaken(userBody.email)) {
   //   throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
   // }
-    return newUser.save();
+  return newUser.save();
 };
 
 /**
@@ -58,12 +58,18 @@ const updateUserById = async (userId, updateBody) => {
   let _user = await User.findById(userId);
   if (!_user) {
     updateBody._id = userId;
-      _user = new User(updateBody);
-      _user.providerData = updateBody.providerData;
-      return await _user.save();
+    _user = new User(updateBody);
+    _user.providerData = updateBody.providerData;
+    return await _user.save();
   }
-  const providers = _user.providerData.map(p => p.providerId);
-  _user.providerData.push(...updateBody.providerData.filter(p => !providers.includes(p.providerId)));
+  if (updateBody.providerData) {
+    const providers = _user.providerData.map((p) => p.providerId);
+    _user.providerData.push(
+      ...updateBody.providerData.filter(
+        (p) => !providers.includes(p.providerId)
+      )
+    );
+  }
   return await _user.save();
 };
 
@@ -75,7 +81,7 @@ const updateUserById = async (userId, updateBody) => {
 const deleteUserById = async (userId) => {
   const user = await getUserById(userId);
   if (!user) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "User not found");
   }
   await user.remove();
   return user;
