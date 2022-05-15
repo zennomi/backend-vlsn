@@ -3,6 +3,7 @@ const express = require('express');
 const userRoute = require('./user.route');
 const questionRoute = require('./question.route');
 const testRoute = require('./test.route');
+const videoRoute = require('./video.route');
 const answerSheetRoute = require('./answerSheet.route');
 const managementRoute = require('./management.route');
 const docsRoute = require('./docs.route');
@@ -22,6 +23,10 @@ const defaultRoutes = [
   {
     path: '/tests',
     route: testRoute,
+  },
+  {
+    path: '/videos',
+    route: videoRoute,
   },
   {
     path: '/answersheets',
