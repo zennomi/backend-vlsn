@@ -7,13 +7,45 @@ const Schema = mongoose.Schema;
 const courseSchema = new Schema(
   {
     tags: [String],
-    name: String,
+    title: {
+      type: String,
+      required: true
+    },
     grade: { type: Number },
     description: {
       type: String,
       get: decode,
     },
-    isPublished: Boolean
+    coverURL: {
+      type: String,
+      required: true,
+    },
+    isPublished: Boolean,
+    videos: [{
+      id: {
+        type: Schema.Types.ObjectId,
+        ref: "Video"
+      },
+      index: {
+        type: Number,
+        required: true
+      }
+    }],
+    tests: [{
+      id: {
+        type: Schema.Types.ObjectId,
+        ref: "Test"
+      },
+      index: {
+        type: Number,
+        required: true
+      }
+    }],
+    price: {
+      type: Number,
+      required: true,
+    },
+    priceSale: Number
   },
   {
     timestamps: true,

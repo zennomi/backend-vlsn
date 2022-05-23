@@ -4,6 +4,7 @@ const userRoute = require('./user.route');
 const questionRoute = require('./question.route');
 const testRoute = require('./test.route');
 const videoRoute = require('./video.route');
+const courseRoute = require('./course.route');
 const answerSheetRoute = require('./answerSheet.route');
 const managementRoute = require('./management.route');
 const config = require('../../configs/config');
@@ -26,6 +27,10 @@ const defaultRoutes = [
   {
     path: '/videos',
     route: videoRoute,
+  },
+  {
+    path: '/courses',
+    route: courseRoute,
   },
   {
     path: '/answersheets',

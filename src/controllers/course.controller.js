@@ -1,0 +1,66 @@
+const httpStatus = require('http-status');
+const pick = require('../utils/pick');
+const ApiError = require('../utils/ApiError');
+const catchAsync = require('../utils/catchAsync');
+const { courseService, videoService } = require('../services');
+
+const createCourse = catchAsync(async (req, res) => {
+  const course = await courseService.createCourse(req.body);
+  const nullVideos = await videoService.detectNullVideos(req.body.videos.map(v => v.id));
+  console.log(nullVideos);
+  if (nullVideos.length > 0) return res.status(httpStatus.CONFLICT).send({ videos: nullVideos });
+  res.status(httpStatus.CREATED).send(course);
+});
+
+const getCourses = catchAsync(async (req, res) => {
+  const filter = pick(req.query, ['name', 'grade', 'tags']);
+  const options = pick(req.query, ['sortBy', 'limit', 'page']);
+  if (!req.user?.isStaff) filter.isPublic = true;
+  const result = await courseService.queryCourses(filter, options);
+  res.send(result);
+});
+
+const getCourse = catchAsync(async (req, res) => {
+  const options = pick(req.query, ['populate']);
+  const course = await courseService.getCourseById(req.params.courseId, options);
+  if (!course) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Course not found');
+  }
+  if (options?.populate?.includes("questions")) {
+    course.questions = course.questions.map(q => {
+      q.choices = q.choices.map(c => ({ ...c.toJSON(), isTrue: undefined }));
+      return q;
+    });
+  }
+  res.send(course);
+});
+
+const getCourseKey = catchAsync(async (req, res) => {
+  const key = await courseService.getCourseKey(req.params.courseId);
+  res.send(key);
+});
+
+const updateCourse = catchAsync(async (req, res) => {
+  const course = await courseService.updateCourseById(req.params.courseId, req.body);
+  res.send(course);
+});
+
+const deleteCourse = catchAsync(async (req, res) => {
+  await courseService.deleteCourseById(req.params.courseId);
+  res.status(httpStatus.NO_CONTENT).send();
+});
+
+const getResultTable = catchAsync(async (req, res) => {
+  const table = await courseService.getResultTableById(req.params.courseId, req.query.userId);
+  res.status(httpStatus.OK).send(table);
+});
+
+module.exports = {
+  createCourse,
+  getCourses,
+  getCourse,
+  getCourseKey,
+  updateCourse,
+  deleteCourse,
+  getResultTable,
+};

@@ -30,13 +30,19 @@ const queryVideos = async (filter, options) => {
   return videos;
 };
 
+const detectNullVideos = async (ids) => {
+  let foundVideos = await Video.find({ _id: { $in: ids } });
+  foundVideos = foundVideos.map(v => v._id);
+  return ids.filter(id => !foundVideos.includes(id));
+}
+
 /**
  * Get video by id
  * @param {ObjectId} id
  * @returns {Promise<Video>}
  */
 const getVideoById = async (id, options) => {
-  let videoPromise = Video.findOne({ _id: id });
+  let videoPromise = Video.findById(id);
   if (options?.populate) {
     options.populate.split(',').forEach((populateOption) => {
       videoPromise = videoPromise.populate(
@@ -133,4 +139,5 @@ module.exports = {
   updateVideoById,
   deleteVideoById,
   getResultTableById,
+  detectNullVideos,
 };

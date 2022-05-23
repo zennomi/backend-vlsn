@@ -39,7 +39,7 @@ const queryTests = async (filter, options) => {
  * @returns {Promise<Test>}
  */
 const getTestById = async (id, options) => {
-  let testPromise = Test.findOne({ _id: id });
+  let testPromise = Test.findById(id);
   if (options?.populate) {
     options.populate.split(',').forEach((populateOption) => {
       testPromise = testPromise.populate(

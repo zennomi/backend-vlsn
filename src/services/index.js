@@ -3,4 +3,5 @@ module.exports.userService = require('./user.service');
 module.exports.questionService = require('./question.service');
 module.exports.testService = require('./test.service');
 module.exports.videoService = require('./video.service');
+module.exports.courseService = require('./course.service');
 module.exports.answerSheetService = require('./answerSheet.service');
