@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const { toJSON, paginate } = require("./plugins");
 const { decode } = require("html-entities");
-const { encode: base64Encode } = require("js-base64");
 
 const Schema = mongoose.Schema;
 
