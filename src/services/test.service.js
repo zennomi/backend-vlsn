@@ -33,6 +33,12 @@ const queryTests = async (filter, options) => {
   return tests;
 };
 
+const detectNullTests = async (ids) => {
+  let foundTests = await Test.find({ _id: { $in: ids } });
+  foundTests = foundTests.map(v => v._id);
+  return ids.filter(id => !foundTests.includes(id));
+}
+
 /**
  * Get test by id
  * @param {ObjectId} id
@@ -136,4 +142,5 @@ module.exports = {
   updateTestById,
   deleteTestById,
   getResultTableById,
+  detectNullTests,
 };

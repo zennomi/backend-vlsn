@@ -2,13 +2,14 @@ const httpStatus = require('http-status');
 const pick = require('../utils/pick');
 const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
-const { courseService, videoService } = require('../services');
+const { courseService, videoService, testService } = require('../services');
 
 const createCourse = catchAsync(async (req, res) => {
   const course = await courseService.createCourse(req.body);
   const nullVideos = await videoService.detectNullVideos(req.body.videos.map(v => v.id));
+  const nullTests = await testService.detectNullTests(req.body.videos.map(v => v.id));
   console.log(nullVideos);
-  if (nullVideos.length > 0) return res.status(httpStatus.CONFLICT).send({ videos: nullVideos });
+  if (nullVideos.length > 0 || nullTests.length > 0) return res.status(httpStatus.CONFLICT).send({ videos: nullVideos, tests: nullTests });
   res.status(httpStatus.CREATED).send(course);
 });
 

@@ -29,7 +29,8 @@ const courseSchema = new Schema(
       index: {
         type: Number,
         required: true
-      }
+      },
+      _id: false
     }],
     tests: [{
       id: {
@@ -39,7 +40,8 @@ const courseSchema = new Schema(
       index: {
         type: Number,
         required: true
-      }
+      },
+      _id: false
     }],
     price: {
       type: Number,
