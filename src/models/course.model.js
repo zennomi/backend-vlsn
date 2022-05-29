@@ -21,6 +21,7 @@ const courseSchema = new Schema(
       required: true,
     },
     isPublished: Boolean,
+    isSale: Boolean,
     videos: [{
       id: {
         type: Schema.Types.ObjectId,

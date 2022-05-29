@@ -23,12 +23,6 @@ const getVideo = catchAsync(async (req, res) => {
   if (!video) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Video not found');
   }
-  if (options?.populate?.includes("questions")) {
-    video.questions = video.questions.map(q => {
-      q.choices = q.choices.map(c => ({ ...c.toJSON(), isTrue: undefined }));
-      return q;
-    });
-  }
   res.send(video);
 });
 

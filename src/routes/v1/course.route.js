@@ -16,9 +16,6 @@ router
   .patch(cacheRequest.deleteCache, staffRequire, courseController.updateCourse)
   .delete(authRequire, staffRequire, courseController.deleteCourse);
 
-router.route('/:courseId/key')
-  .get(authRequire, cacheRequest.setCache(60 * 5), courseController.getCourseKey)
-
 router.route('/:courseId/result-table')
   .get(courseController.getResultTable);
 

@@ -35,7 +35,7 @@ const queryTests = async (filter, options) => {
 
 const detectNullTests = async (ids) => {
   let foundTests = await Test.find({ _id: { $in: ids } });
-  foundTests = foundTests.map(v => v._id);
+  foundTests = foundTests.map(v => v._id.toString());
   return ids.filter(id => !foundTests.includes(id));
 }
 

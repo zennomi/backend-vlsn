@@ -5,11 +5,10 @@ const catchAsync = require('../utils/catchAsync');
 const { courseService, videoService, testService } = require('../services');
 
 const createCourse = catchAsync(async (req, res) => {
-  const course = await courseService.createCourse(req.body);
   const nullVideos = await videoService.detectNullVideos(req.body.videos.map(v => v.id));
-  const nullTests = await testService.detectNullTests(req.body.videos.map(v => v.id));
-  console.log(nullVideos);
+  const nullTests = await testService.detectNullTests(req.body.tests.map(v => v.id));
   if (nullVideos.length > 0 || nullTests.length > 0) return res.status(httpStatus.CONFLICT).send({ videos: nullVideos, tests: nullTests });
+  const course = await courseService.createCourse(req.body);
   res.status(httpStatus.CREATED).send(course);
 });
 
@@ -36,12 +35,10 @@ const getCourse = catchAsync(async (req, res) => {
   res.send(course);
 });
 
-const getCourseKey = catchAsync(async (req, res) => {
-  const key = await courseService.getCourseKey(req.params.courseId);
-  res.send(key);
-});
-
 const updateCourse = catchAsync(async (req, res) => {
+  const nullVideos = await videoService.detectNullVideos(req.body.videos.map(v => v.id));
+  const nullTests = await testService.detectNullTests(req.body.tests.map(v => v.id));
+  if (nullVideos.length > 0 || nullTests.length > 0) return res.status(httpStatus.CONFLICT).send({ videos: nullVideos, tests: nullTests });
   const course = await courseService.updateCourseById(req.params.courseId, req.body);
   res.send(course);
 });
@@ -60,7 +57,6 @@ module.exports = {
   createCourse,
   getCourses,
   getCourse,
-  getCourseKey,
   updateCourse,
   deleteCourse,
   getResultTable,

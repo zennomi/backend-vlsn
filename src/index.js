@@ -8,7 +8,6 @@ let server;
 
 const startSever = async () => {
   await mongoose.connect(config.mongoose.url, config.mongoose.options);
-  console.log(config.mongoose.url)
   logger.info('Connected to MongoDB');
   await redisClient.connect();
   logger.info('Connected to Redis');

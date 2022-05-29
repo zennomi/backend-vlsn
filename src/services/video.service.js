@@ -32,7 +32,7 @@ const queryVideos = async (filter, options) => {
 
 const detectNullVideos = async (ids) => {
   let foundVideos = await Video.find({ _id: { $in: ids } });
-  foundVideos = foundVideos.map(v => v._id);
+  foundVideos = foundVideos.map(v => v._id.toString());
   return ids.filter(id => !foundVideos.includes(id));
 }
 
@@ -89,7 +89,6 @@ const updateVideoById = async (videoId, updateBody) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'Video not found');
   }
   Object.assign(video, updateBody);
-  console.log(video);
   await video.save();
   return video;
 };
