@@ -16,7 +16,8 @@ const setCache = (second) =>
 
       // wrapper send response function
       res.send = function (body) {
-        redisClient.setEx(req.originalUrl, second, JSON.stringify(body));
+        if (body && !(body.code != 200 || body.message))
+          redisClient.setEx(req.originalUrl, second, JSON.stringify(body));
         send(body);
       };
       next();

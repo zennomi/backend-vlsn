@@ -22,16 +22,16 @@ const getCourses = catchAsync(async (req, res) => {
 
 const getCourse = catchAsync(async (req, res) => {
   const options = pick(req.query, ['populate']);
-  const course = await courseService.getCourseById(req.params.courseId, options);
+  options.populate = Array.from((new Set(options.populate?.split(",") || [])).add('videos.id').add('tests.id')).join(",");
+  let course = await courseService.getCourseById(req.params.courseId, options);
   if (!course) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Course not found');
   }
-  if (options?.populate?.includes("questions")) {
-    course.questions = course.questions.map(q => {
-      q.choices = q.choices.map(c => ({ ...c.toJSON(), isTrue: undefined }));
-      return q;
-    });
-  }
+  course = course.toJSON();
+  course.components = [...course.videos.map(v => ({ ...v.id, index: v.index, type: 'video' })), ...course.tests.map(v => ({ ...v.id, index: v.index, type: 'test' }))].sort((a, b) => (a.index - b.index));
+  delete course.videos;
+  delete course.tests;
+  console.log(course);
   res.send(course);
 });
 
