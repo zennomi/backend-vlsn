@@ -36,6 +36,10 @@ const testSchema = new Schema(
       type: String,
       set: base64Encode,
     },
+    price: {
+      type: Number,
+      default: 0
+  }
   },
   {
     timestamps: true,

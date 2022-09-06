@@ -26,6 +26,10 @@ const videoSchema = new Schema(
         grade: {
             type: Number,
             enums: [10, 11, 12]
+        },
+        price: {
+            type: Number,
+            default: 0
         }
     },
     {
