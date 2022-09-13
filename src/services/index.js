@@ -5,3 +5,4 @@ module.exports.testService = require('./test.service');
 module.exports.videoService = require('./video.service');
 module.exports.courseService = require('./course.service');
 module.exports.answerSheetService = require('./answerSheet.service');
+module.exports.depositService = require('./deposit.service');
