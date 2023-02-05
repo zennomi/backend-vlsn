@@ -11,13 +11,13 @@ const depositSchema = new Schema(
             required: true,
         },
         user: {
-            type: mongoose.Types.ObjectId,
-            ref: 'User',
+            type: String,
+            ref: 'FirebaseUser',
             required: true,
         },
         method: {
             type: String,
-            enum: ['MB_BANK', 'MOMO'],
+            enum: ['MB_BANK', 'MOMO', 'TECHCOMBANK'],
             required: true,
         },
         isVerified: {
@@ -26,7 +26,7 @@ const depositSchema = new Schema(
             default: false,
         },
         verifiedUser: {
-            type: mongoose.Types.ObjectId,
+            type: String,
         },
         verifiedAt: {
             type: Date

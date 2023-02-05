@@ -48,8 +48,8 @@ const getToken = catchAsync(async (req, res) => {
       if (!user) {
         user = await userService.updateUserById(bodyUser.uid, bodyUser);
       }
-      const { role, _id, email, displayName, photoURL, managementAppAccount } = user;
-      const token = jwt.sign({ role, id: _id, email, displayName, photoURL, managementAppAccount }, process.env.TOKEN_KEY, { expiresIn: "2h" });
+      const { role, _id, email, displayName, photoURL, managementAppAccount, balance } = user;
+      const token = jwt.sign({ role, id: _id, email, displayName, photoURL, managementAppAccount, balance }, process.env.TOKEN_KEY, { expiresIn: "2h" });
       return res.status(httpStatus.CREATED).send(token);
     }
   } catch (error) {

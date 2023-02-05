@@ -2,7 +2,7 @@ const httpStatus = require('http-status');
 const pick = require('../utils/pick');
 const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
-const { depositService } = require('../services');
+const { depositService, userService } = require('../services');
 
 const createDeposit = catchAsync(async (req, res) => {
     const deposit = await depositService.createDeposit(req.body);
@@ -10,8 +10,8 @@ const createDeposit = catchAsync(async (req, res) => {
 });
 
 const getDeposits = catchAsync(async (req, res) => {
-    const filter = pick(req.query, ['user']);
-    const options = pick(req.query, ['sortBy', 'limit', 'page']);
+    const filter = pick(req.query, ['user', 'isVerified']);
+    const options = pick(req.query, ['sortBy', 'limit', 'page', 'populate']);
     const result = await depositService.queryDeposits(filter, options);
     res.send(result);
 });
@@ -37,7 +37,10 @@ const verifyDeposit = catchAsync(async (req, res) => {
         verifiedAt: new Date(),
         verifiedUser: req.user.id,
     }
-    const deposit = await depositService.updateDepositById(req.params.depositId, req.body);
+    const deposit = await depositService.updateDepositById(req.params.depositId, updateInfo);
+    const user = await userService.getUserById(deposit.user);
+    user.balance += deposit.amount;
+    await user.save();
     res.send(deposit);
 })
 

@@ -1,19 +1,18 @@
 const express = require('express');
 const depositController = require('../../controllers/deposit.controller');
 const { authRequire, staffRequire, auth } = require("../../middlewares/auth.middleware");
-const cacheRequest = require('../../middlewares/cache');
 
 const router = express.Router();
 
 router
     .route('/')
-    .post(staffRequire, depositController.createCourse)
-    .get(auth, depositController.getCourses);
+    .post(staffRequire, depositController.createDeposit)
+    .get(auth, depositController.getDeposits);
 
 router
     .route('/:depositId')
-    .patch(staffRequire, depositController.updateCourse)
-    .delete(authRequire, staffRequire, depositController.deleteCourse);
+    .patch(staffRequire, depositController.updateDeposit)
+    .delete(authRequire, staffRequire, depositController.deleteDeposit);
 
 router
     .route('/:depositId/verify')

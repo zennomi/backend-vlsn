@@ -31,7 +31,6 @@ const getCourse = catchAsync(async (req, res) => {
   course.components = [...course.videos.map(v => ({ ...v.id, index: v.index, type: 'video' })), ...course.tests.map(v => ({ ...v.id, index: v.index, type: 'test' }))].sort((a, b) => (a.index - b.index));
   delete course.videos;
   delete course.tests;
-  console.log(course);
   res.send(course);
 });
 
