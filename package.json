@@ -12,9 +12,7 @@
   },
   "scripts": {
     "start": "node src/index.js",
-    "dev": "cross-env NODE_ENV=development nodemon src/index.js",
-    "redis": "redis-server",
-    "local": "concurrently \"npm run redis \" \"npm run dev\""
+    "dev": "cross-env NODE_ENV=development nodemon src/index.js"
   },
   "keywords": [
     "node",

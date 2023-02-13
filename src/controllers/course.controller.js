@@ -13,9 +13,9 @@ const createCourse = catchAsync(async (req, res) => {
 });
 
 const getCourses = catchAsync(async (req, res) => {
-  const filter = pick(req.query, ['name', 'grade', 'tags']);
+  const filter = pick(req.query, ['title', 'grade', 'tags']);
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
-  if (!req.user?.isStaff) filter.isPublic = true;
+  if (!req.user?.isStaff) filter.isPublished = true;
   const result = await courseService.queryCourses(filter, options);
   res.send(result);
 });

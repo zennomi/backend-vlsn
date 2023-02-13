@@ -25,7 +25,6 @@ const createCourse = async (courseBody) => {
 const queryCourses = async (filter, options) => {
   if (filter.name) filter.name = { $regex: filter.name, "$options": "i" };
   if (filter.tags) tags = { $all: filter.tags.split(",") };
-  console.log(filter);
   const courses = await Course.paginate(filter, options);
   return courses;
 };
