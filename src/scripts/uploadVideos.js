@@ -4,7 +4,7 @@ const mongoose = require("../configs/mongoose")
 const Video = require("../models/video.model")
 const Course = require("../models/course.model")
 
-const input = [
+const inputs = [
     {
         file: "./data/daodongco.json",
         name: "Dao Động Cơ"
@@ -13,10 +13,22 @@ const input = [
         file: "./data/songco.json",
         name: "Sóng Cơ"
     },
+    {
+        file: "./data/machlc.json",
+        name: "Mạch LC - Sóng điện từ"
+    },
+    {
+        file: "./data/dienxoaychieu.json",
+        name: "Điện Xoay Chiều"
+    },
+    {
+        file: "./data/songanhsang.json",
+        name: "Sóng Ánh Sáng"
+    },
 ]
-
-const data = require(input[1].file)
-const courseName = input[1].name;
+const input = inputs[0]
+const data = require(input.file)
+const courseName = input.name;
 
 (async () => {
     const videos = await Promise.all(data.map(video => {
@@ -40,4 +52,5 @@ const courseName = input[1].name;
         videos: videos.map((v, index) => ({ id: v._id, index })),
         price: 200000
     })
+    console.log("Done")
 })()
