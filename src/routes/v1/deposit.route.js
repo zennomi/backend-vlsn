@@ -6,7 +6,7 @@ const router = express.Router();
 
 router
     .route('/')
-    .post(staffRequire, depositController.createDeposit)
+    .post(depositController.createDeposit)
     .get(auth, depositController.getDeposits);
 
 router
