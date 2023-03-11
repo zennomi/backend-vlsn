@@ -6,3 +6,4 @@ module.exports.videoService = require('./video.service');
 module.exports.courseService = require('./course.service');
 module.exports.answerSheetService = require('./answerSheet.service');
 module.exports.depositService = require('./deposit.service');
+module.exports.purchaseCodeService = require('./purchaseCode.service')

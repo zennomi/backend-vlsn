@@ -26,7 +26,7 @@ const inputs = [
         name: "Sóng Ánh Sáng"
     },
 ]
-const input = inputs[0]
+const input = inputs[2]
 const data = require(input.file)
 const courseName = input.name;
 

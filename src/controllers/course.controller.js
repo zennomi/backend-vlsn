@@ -2,7 +2,9 @@ const httpStatus = require('http-status');
 const pick = require('../utils/pick');
 const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
-const { courseService, videoService, testService } = require('../services');
+const { courseService, videoService, testService, purchaseCodeService } = require('../services');
+const axios = require("axios");
+const { shopAppUrl } = require('../configs/config');
 
 const createCourse = catchAsync(async (req, res) => {
   const nullVideos = await videoService.detectNullVideos(req.body.videos.map(v => v.id));
@@ -52,6 +54,35 @@ const getResultTable = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).send(table);
 });
 
+const activeCourse = catchAsync(async (req, res) => {
+  const code = req.body.purchaseCode
+  if (await purchaseCodeService.getPurchaseCodeByCode(code))
+    return res.status(httpStatus.NOT_ACCEPTABLE).send()
+  const url = `${shopAppUrl}/get-product-by-purchase-code/${code}`
+  const { data } = await axios.get(url)
+  if (!data) return res.status(httpStatus.NOT_FOUND).send()
+  const field = data.product.customFields.find(field => field.product_filter_key = "course_ids")
+  if (!field) return res.status(httpStatus.NOT_FOUND).send()
+  const purchaseCode = await purchaseCodeService.createPurchaseCode({ _id: code, user: req.user.id, courses: field.value.split(",") })
+  res.json({ purchaseCode })
+})
+
+const activedCourse = catchAsync(async (req, res) => {
+  const { courseId } = req.query;
+  const code = await purchaseCodeService.getPurchaseCodeByUserIdAndCourseId(req.user.id, courseId)
+  res.json({
+    actived: !!code
+  })
+})
+
+const getActivedCourses = catchAsync(async (req, res) => {
+  const codes = await purchaseCodeService.getPurchaseCodesByUserId(req.user.id)
+  const courseIds = []
+  for (const code of codes) courseIds.push(...code.courses)
+  const result = await courseService.queryCourses({ ids: courseIds.join(",") }, {limit: 100})
+  res.json(result)
+})
+
 module.exports = {
   createCourse,
   getCourses,
@@ -59,4 +90,7 @@ module.exports = {
   updateCourse,
   deleteCourse,
   getResultTable,
+  activeCourse,
+  activedCourse,
+  getActivedCourses,
 };

@@ -19,6 +19,9 @@ router
 router.route('/:testId/key')
   .get(authRequire, cacheRequest.setCache(60 * 5), testController.getTestKey)
 
+router.route('/:testId/questions')
+  .get(authRequire, cacheRequest.setCache(60 * 5), testController.getTestWithQuestions)
+
 router.route('/:testId/result-table')
   .get(testController.getResultTable);
 

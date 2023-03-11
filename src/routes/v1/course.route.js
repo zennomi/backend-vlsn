@@ -10,6 +10,10 @@ router
   .post(staffRequire, courseController.createCourse)
   .get(auth, courseController.getCourses);
 
+router.route('/active').get(authRequire, courseController.activedCourse).post(authRequire, courseController.activeCourse)
+
+router.route('/actived').get(authRequire, courseController.getActivedCourses)
+
 router
   .route('/:courseId')
   .get(cacheRequest.setCache(60 * 5), courseController.getCourse)
