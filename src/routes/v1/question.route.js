@@ -9,6 +9,9 @@ router
   .post(staffRequire, questionController.createQuestion)
   .get(questionController.getQuestions);
 
+router.route("/bulk")
+  .post(staffRequire, questionController.createQuestions)
+
 router
   .route("/:questionId")
   .get(questionController.getQuestion)

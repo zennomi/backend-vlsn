@@ -42,8 +42,14 @@ const getQuestionsWithCriterias = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).send(results);
 });
 
+const createQuestions = catchAsync(async (req, res) => {
+  const questions = await questionService.createQuestions(req.body)
+  res.send(questions)
+})
+
 module.exports = {
   createQuestion,
+  createQuestions,
   getQuestions,
   getQuestion,
   updateQuestion,

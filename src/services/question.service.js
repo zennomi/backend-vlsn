@@ -8,11 +8,12 @@ const ApiError = require("../utils/ApiError");
  * @returns {Promise<Question>}
  */
 const createQuestion = async (questionBody) => {
-  //   if (await Question.isEmailTaken(questionBody.email)) {
-  //     throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
-  //   }
   return Question.create(questionBody);
 };
+
+const createQuestions = async (body) => {
+  return Question.insertMany(body)
+}
 
 /**
  * Query for questions
@@ -115,6 +116,7 @@ const queryQuestionsWithCriterias = async (criterias) => {
 
 module.exports = {
   createQuestion,
+  createQuestions,
   queryQuestions,
   getQuestionById,
   getQuestionByEmail,
