@@ -3,11 +3,7 @@ const express = require('express');
 const userRoute = require('./user.route');
 const questionRoute = require('./question.route');
 const testRoute = require('./test.route');
-const videoRoute = require('./video.route');
-const courseRoute = require('./course.route');
-const depositRoute = require('./deposit.route');
 const answerSheetRoute = require('./answerSheet.route');
-const managementRoute = require('./management.route');
 const config = require('../../configs/config');
 
 const router = express.Router();
@@ -26,24 +22,8 @@ const defaultRoutes = [
     route: testRoute,
   },
   {
-    path: '/videos',
-    route: videoRoute,
-  },
-  {
-    path: '/deposits',
-    route: depositRoute,
-  },
-  {
-    path: '/courses',
-    route: courseRoute,
-  },
-  {
     path: '/answersheets',
     route: answerSheetRoute,
-  },
-  {
-    path: '/managementapp',
-    route: managementRoute,
   },
 ];
 
