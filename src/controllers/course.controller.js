@@ -63,7 +63,7 @@ const activeCourse = catchAsync(async (req, res) => {
   if (!data) return res.status(httpStatus.NOT_FOUND).send()
   const field = data.product.customFields.find(field => field.product_filter_key = "course_ids")
   if (!field) return res.status(httpStatus.NOT_FOUND).send()
-  const purchaseCode = await purchaseCodeService.createPurchaseCode({ _id: code, user: req.user.id, courses: field.value.split(",") })
+  const purchaseCode = await purchaseCodeService.createPurchaseCode({ _id: code, user: req.user.id, courses: field.value.split(", ") })
   res.json({ purchaseCode })
 })
 

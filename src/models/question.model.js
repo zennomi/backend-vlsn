@@ -39,10 +39,6 @@ const questionSchema = new Schema({
 }
 );
 
-questionSchema.methods.getMaxLengthChoice = function () {
-    return Math.max(...this.choices.map(c => c.content.replace(/<.*>/g, "").length))
-}
-
 questionSchema.methods.getTrueChoiceArray = function () {
     return this.choices.filter(c => c.isTrue).map(c => String(c._id));
 }
